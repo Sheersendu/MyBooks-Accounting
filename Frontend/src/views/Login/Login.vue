@@ -23,6 +23,7 @@
 export default {
   methods: {
     onSignIn(){
+      this.$store.dispatch('authenticateUser');
       this.$router.push('dashboard');
     }
   }

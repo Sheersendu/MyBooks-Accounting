@@ -9,7 +9,9 @@
         </thead>
         <tbody v-for="request in requests">
             <tr>
-                <td class="table-light"><a v-bind:href="'request/' + request.requestID">{{ request.requestID }}</a></td>
+                <!-- <td class="table-light"><a v-bind:href="'request/' + request.requestID">{{ request.requestID }}</a></td> -->
+                <td class="table-light"><router-link class="nav-link" :to="'/request/' + request.requestID">{{
+                    request.requestID }}</router-link></td>
                 <td class="table-light">{{ request.customerId }}</td>
                 <td class="table-light">{{ request.task }}</td>
             </tr>
@@ -25,13 +27,13 @@ export default {
             // requests: demo
         }
     },
-    mounted(){
-        this.$store.dispatch('addRequestAsync',{
-                "requestID": "Store Request5",
-                "customerId": "C1",
-                "task": "Task1"
-            });
-    }
+    // mounted(){
+    //     this.$store.dispatch('addRequestAsync',{
+    //             "requestID": "Store Request5",
+    //             "customerId": "C1",
+    //             "task": "Task1"
+    //         });
+    // }
 }
 
 </script>

@@ -23,21 +23,31 @@ export default createStore({
                 "customerId": "C2",
                 "task": "Task3"
             }
-        ]
+        ],
+        isUserAuthenticated: false
     },
     mutations: {
         addRequest(state, request) {
             state.requestList.push(request);
+        },
+        authenticateUser(state) {
+            state.isUserAuthenticated = true;
         }
     },
     actions: {
         addRequestAsync({ commit }, request) {
-            commit('addRequest',request);
+            commit('addRequest', request);
+        },
+        authenticateUser({ commit }) {
+            commit('authenticateUser')
         }
     },
     getters: {
-        getRequestList(state){
+        getRequestList(state) {
             return state.requestList;
+        },
+        isAuthenticated(state) {
+            return state.isUserAuthenticated;
         }
     }
 })

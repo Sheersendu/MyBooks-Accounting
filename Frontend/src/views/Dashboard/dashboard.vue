@@ -7,7 +7,7 @@
             <div class="card-body">
               <h5 class="card-title">All Requests</h5>
               <!-- <p class="card-text">List of all customer's requests</p> -->
-              <a href="/all-requests" class="btn btn-primary">View</a>
+              <button class="btn btn-primary"><router-link class="nav-link" to="/all-requests/">View</router-link></button>
             </div>
           </div>
         </div>
