@@ -74,7 +74,7 @@ IF OBJECT_ID('[dbo].[CustomerRequest]') IS NULL
                     [dbo].[Customer]([CUST_PK])
                 ON DELETE CASCADE;
     ALTER TABLE
-        [dbo].[ExpertRequest]
+        [dbo].[CustomerRequest]
         ADD CONSTRAINT
             [FK_Request_Customer]
             FOREIGN KEY
