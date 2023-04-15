@@ -17,6 +17,9 @@ namespace Backend.Business
 			var query = "SELECT * FROM Expert";
 			using (var connection = _context.CreateConnection())
 			{
+				// var sqlPath = Path.Combine(Environment.CurrentDirectory, "Scripts", "CreateTables.sql");
+				// var sqlFile = await File.ReadAllTextAsync(sqlPath);
+				// connection.Execute(sqlFile);
 				var experts = await connection.QueryAsync<Expert>(query);
 				return experts.ToList();
 			}
