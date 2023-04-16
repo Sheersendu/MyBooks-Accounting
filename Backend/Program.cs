@@ -9,7 +9,8 @@ class Program
 		var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-		builder.Services.AddSingleton<DapperContext>(); 
+		builder.Services.AddSingleton<DapperContext>();
+		builder.Services.AddSingleton<MonitorLoop>();
 		builder.Services.AddControllers();
 		builder.Services.AddHostedService<QueuedHostedService>();
 		builder.Services.AddSingleton<IBackgroundTaskQueue>(_ => 
@@ -27,7 +28,8 @@ class Program
 		builder.Services.AddSingleton<IExpertRepository, ExpertRepository>();
 
 		var app = builder.Build();
-
+		MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
+		monitorLoop.StartMonitorLoop();
 // Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
 		{
