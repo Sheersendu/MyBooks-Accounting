@@ -12,7 +12,8 @@ class Program
 		builder.Services.AddSingleton<DapperContext>();
 		builder.Services.AddSingleton<MonitorLoop>();
 		builder.Services.AddControllers();
-		builder.Services.AddHostedService<QueuedHostedService>();
+		builder.Services.AddSingleton<QueuedHostedService>();
+		// builder.Services.AddHostedService<QueuedHostedService>();
 		builder.Services.AddSingleton<IBackgroundTaskQueue>(_ => 
 		{
 			if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))

@@ -2,7 +2,7 @@ namespace Backend.BackgroundServices;
 
 public interface IBackgroundTaskQueue
 {
-	void QueueBackgroundWorkItem(Func<CancellationToken, ValueTask> workItem);
+	void QueueBackgroundWorkItem(Guid workItem);
 
-	ValueTask<Func<CancellationToken, ValueTask>> Dequeue(CancellationToken cancellationToken);
+	Guid Dequeue();
 }

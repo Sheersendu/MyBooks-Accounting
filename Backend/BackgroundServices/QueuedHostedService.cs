@@ -4,11 +4,12 @@ public class QueuedHostedService : BackgroundService
 {
 	private readonly IBackgroundTaskQueue _taskQueue;
 	private readonly ILogger<QueuedHostedService> _logger;
+	private int experts;
 
 	public QueuedHostedService(
 		IBackgroundTaskQueue taskQueue,
 		ILogger<QueuedHostedService> logger) =>
-		(_taskQueue, _logger) = (taskQueue, logger);
+		(_taskQueue, _logger, experts) = (taskQueue, logger, 5);
 
 	protected override Task ExecuteAsync(CancellationToken stoppingToken)
 	{
@@ -16,19 +17,18 @@ public class QueuedHostedService : BackgroundService
 			$"{nameof(QueuedHostedService)} is running.{Environment.NewLine}" +
 			$"{Environment.NewLine}Tap W to add a work item to the " +
 			$"background queue.{Environment.NewLine}");
-
 		return ProcessTaskQueue(stoppingToken);
 	}
 
-	private async Task ProcessTaskQueue(CancellationToken stoppingToken)
+	public Task ProcessTaskQueue(CancellationToken stoppingToken)
 	{
-		while (!stoppingToken.IsCancellationRequested)
+		while (!stoppingToken.IsCancellationRequested && experts>0)
 		{
+			experts -= 1;
+			// _logger.LogInformation(experts.ToString());
 			try
 			{
-				Func<CancellationToken, ValueTask>? workItem =
-					await _taskQueue.Dequeue(stoppingToken);
-				await workItem(stoppingToken);
+				_logger.LogInformation("Queued Service "+_taskQueue.Dequeue());
 			}
 			catch (OperationCanceledException)
 			{
@@ -39,6 +39,8 @@ public class QueuedHostedService : BackgroundService
 				_logger.LogError(ex, "Error occurred executing task work item.");
 			}
 		}
+
+		return Task.CompletedTask;
 	}
 
 	public override async Task StopAsync(CancellationToken stoppingToken)
