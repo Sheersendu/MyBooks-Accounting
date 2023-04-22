@@ -11,11 +11,13 @@ namespace Backend.Controllers
 	[Route("expert")]
 	public class ExpertController: ControllerBase
 	{
-		private readonly IExpertRepository _expertRepo;
+		private readonly IExpertRepository expertRepo;
+
 		public ExpertController(IExpertRepository expertRepo)
 		{
-			_expertRepo = expertRepo;
+			this.expertRepo = expertRepo;
 		}
+
 		[HttpGet("")]
 		public async Task<IActionResult> Get()
 		{
@@ -26,7 +28,7 @@ namespace Backend.Controllers
 			// return connection.Query<Expert>("SELECT * FROM Expert");
 			try
 			{
-				var experts = await _expertRepo.GetExperts();
+				var experts = await expertRepo.GetExperts();
 				return Ok(experts);
 			}
 			catch (Exception ex)
