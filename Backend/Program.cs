@@ -1,8 +1,8 @@
-using Backend.BackgroundServices;
 using Backend.Business;
 using Backend.Context;
+using Backend.Services;
 
-class Program
+static class Program
 {
 	public static void Main(string[] args)
 	{
@@ -12,7 +12,7 @@ class Program
 		builder.Services.AddSingleton<DapperContext>();
 		builder.Services.AddSingleton<MonitorLoop>();
 		builder.Services.AddControllers();
-		builder.Services.AddSingleton<QueuedHostedService>();
+		builder.Services.AddSingleton<QueueService>();
 		// builder.Services.AddHostedService<QueuedHostedService>();
 		builder.Services.AddSingleton<IBackgroundTaskQueue>(_ => 
 		{
@@ -29,8 +29,11 @@ class Program
 		builder.Services.AddSingleton<IExpertRepository, ExpertRepository>();
 
 		var app = builder.Build();
-		MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
+		
+		MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>();
 		monitorLoop.StartMonitorLoop();
+		QueueService queueService = app.Services.GetRequiredService<QueueService>();
+		queueService.StartQueueService();
 // Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
 		{

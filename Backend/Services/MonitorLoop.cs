@@ -1,19 +1,17 @@
-using System.Diagnostics.CodeAnalysis;
-
-namespace Backend.BackgroundServices;
+namespace Backend.Services;
 
 public sealed class MonitorLoop
 {
     private readonly IBackgroundTaskQueue _taskQueue;
     private readonly ILogger<MonitorLoop> _logger;
     private readonly CancellationToken _cancellationToken;
-    readonly QueuedHostedService _service;
+    readonly QueueService _service;
 
     public MonitorLoop(
         IBackgroundTaskQueue taskQueue,
         ILogger<MonitorLoop> logger,
         IHostApplicationLifetime applicationLifetime,
-        QueuedHostedService service)
+        QueueService service)
     {
         _taskQueue = taskQueue;
         _logger = logger;
@@ -38,8 +36,8 @@ public sealed class MonitorLoop
             {
                 // Enqueue a background work item
                 // _taskQueue.QueueBackgroundWorkItem(Guid.NewGuid());
-                _taskQueue.QueueBackgroundWorkItem(BuildWorkItemAsync(_cancellationToken));
-                _service.ProcessTaskQueue(_cancellationToken);
+                _taskQueue.QueueRequest(BuildWorkItemAsync(_cancellationToken));
+                // _service.AssignTaskToExperts();
                 // _logger.LogInformation(BuildWorkItemAsync(_cancellationToken).ToString());
             }
             // _taskQueue.QueueBackgroundWorkItem(BuildWorkItemAsync);
@@ -52,6 +50,7 @@ public sealed class MonitorLoop
         {
             return Guid.NewGuid();
         }
+
         return Guid.Empty;
     }
 }
