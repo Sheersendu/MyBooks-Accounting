@@ -36,7 +36,7 @@ public sealed class MonitorLoop
             {
                 // Enqueue a background work item
                 // _taskQueue.QueueBackgroundWorkItem(Guid.NewGuid());
-                _taskQueue.QueueRequest(BuildWorkItemAsync(_cancellationToken));
+                _taskQueue.EnqueueRequest(BuildWorkItemAsync(_cancellationToken));
                 // _service.AssignTaskToExperts();
                 // _logger.LogInformation(BuildWorkItemAsync(_cancellationToken).ToString());
             }
@@ -46,11 +46,6 @@ public sealed class MonitorLoop
 
     private Guid BuildWorkItemAsync(CancellationToken token)
     {
-        if (!token.IsCancellationRequested)
-        {
-            return Guid.NewGuid();
-        }
-
-        return Guid.Empty;
+        return !token.IsCancellationRequested ? Guid.NewGuid() : Guid.Empty;
     }
 }

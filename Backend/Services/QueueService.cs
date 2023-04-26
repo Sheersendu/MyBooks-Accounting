@@ -34,11 +34,11 @@ public class QueueService
 		foreach (var expert in experts.Result.ToList())
 		{
 			Console.WriteLine(expert.EXP_ID);
-			AssignTaskToExperts(expert);
+			AssignRequestToExpert(expert);
 		}
 	}
 
-	private void AssignTaskToExperts(Expert expert)
+	private void AssignRequestToExpert(Expert expert)
 	{
 		//Make business layer calls here for assignment
 		logger.LogInformation(
@@ -46,7 +46,7 @@ public class QueueService
 			$"{Environment.NewLine}");
 		try
 		{
-			logger.LogInformation("Request: {task} - Expert: {expert}", taskQueue.Dequeue(),expert.EXP_ID);
+			logger.LogInformation("Request: {task} - Expert: {expert}", taskQueue.DequeueRequest(),expert.EXP_ID);
 		}
 		catch (Exception ex)
 		{

@@ -2,25 +2,42 @@ namespace Backend.Services
 {
 	public class DefaultBackgroundTaskQueue : IBackgroundTaskQueue
 	{
-		private readonly Queue<Guid> queue;
+		private readonly Queue<Guid> requestqueue;
+		private readonly Queue<Guid> expertqueue;
 
 		public DefaultBackgroundTaskQueue(int queueCapacity)
 		{
-			queue = new Queue<Guid>();
+			requestqueue = new Queue<Guid>();
+			expertqueue = new Queue<Guid>();
 			for (var i = 0; i < 1; i++)
 			{
-				queue.Enqueue(Guid.NewGuid());
+				requestqueue.Enqueue(Guid.NewGuid());
 			}
 		}
 
-		public void QueueRequest(Guid workItem)
+		public void EnqueueRequest(Guid workItem)
 		{
-			queue.Enqueue(workItem);
+			requestqueue.Enqueue(workItem);
 		}
 
-		public Guid Dequeue()
+		public Guid DequeueRequest()
 		{
-			return queue.Count > 0 ? queue.Dequeue() : Guid.Empty;
+			return requestqueue.Count > 0 ? requestqueue.Dequeue() : Guid.Empty;
+		}
+
+		public void EnqueueExpert(Guid expertId)
+		{
+			expertqueue.Enqueue(expertId);
+		}
+
+		public Guid DequeueExpert()
+		{
+			return expertqueue.Count > 0 ? expertqueue.Dequeue() : Guid.Empty;
+		}
+
+		public bool IsExpertAvailable()
+		{
+			return expertqueue.Any();
 		}
 	}
 }

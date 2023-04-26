@@ -15,6 +15,8 @@ namespace Backend.Business
 		EXP_CreatedUtc
 	FROM Expert;";
 
+		const string AddExpertQuery = @"INSERT INTO Expert VALUES (NEWID(), @ExpID, @ExpCreatedTime);";
+
 		public ExpertRepository(DapperContext context)
 		{
 			this.context = context;
@@ -28,6 +30,15 @@ namespace Backend.Business
 			// connection.Execute(sqlFile);
 			var experts = await connection.QueryAsync<Expert>(GetExpertsListQuery);
 			return experts.ToList();
+		}
+
+		public async Task AddExpert(int expId)
+		{
+			await context.CreateConnection().ExecuteAsync(AddExpertQuery, new
+			{
+				ExpID = expId,
+				ExpCreatedTime = DateTime.UtcNow
+			});
 		}
 	}
 }

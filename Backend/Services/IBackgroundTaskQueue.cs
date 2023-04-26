@@ -2,7 +2,11 @@ namespace Backend.Services;
 
 public interface IBackgroundTaskQueue
 {
-	void QueueRequest(Guid workItem);
+	void EnqueueRequest(Guid workItem);
 
-	Guid Dequeue();
+	Guid DequeueRequest();
+	void EnqueueExpert(Guid expertId);
+
+	Guid DequeueExpert();
+	bool IsExpertAvailable();
 }
