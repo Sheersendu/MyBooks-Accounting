@@ -3,11 +3,12 @@ IF OBJECT_ID('[dbo].[Expert]') IS NULL
     CREATE TABLE
         [dbo].[Expert]
     (
-        [EXP_PK] [uniqueidentifier] NOT NULL,
-        [EXP_ID] [int] NOT NULL,
-        [EXP_CreatedUtc] [datetime] NOT NULL,
+        [Exp_PK] [uniqueidentifier] NOT NULL,
+        [Exp_ID] [int] NOT NULL,
+        [Exp_IsActive] [bit] NOT NULL,
+        [Exp_CreatedUtc] [datetime] NOT NULL,
         CONSTRAINT
-        [PK_Expert] PRIMARY KEY CLUSTERED ([EXP_PK] ASC)
+        [PK_Expert] PRIMARY KEY CLUSTERED ([Exp_PK] ASC)
         WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90)
         ON [PRIMARY]
         )
@@ -19,11 +20,12 @@ IF OBJECT_ID('[dbo].[Customer]') IS NULL
     CREATE TABLE
         [dbo].[Customer]
     (
-        [CUST_PK] [uniqueidentifier] NOT NULL,
-        [CUST_ID] [int] NOT NULL,
-        [CUST_CreatedUtc] [datetime] NOT NULL,
+        [Cust_PK] [uniqueidentifier] NOT NULL,
+        [Cust_ID] [int] NOT NULL,
+        [Cust_IsActive] [bit] NOT NULL,
+        [Cust_CreatedUtc] [datetime] NOT NULL,
          CONSTRAINT
-        [PK_Customer] PRIMARY KEY CLUSTERED ([CUST_PK] ASC)
+        [PK_Customer] PRIMARY KEY CLUSTERED ([Cust_PK] ASC)
         WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90)
         ON [PRIMARY]
         )
@@ -35,12 +37,12 @@ IF OBJECT_ID('[dbo].[Request]') IS NULL
     CREATE TABLE
         [dbo].[Request]
     (
-        [REQ_PK] [uniqueidentifier] NOT NULL,
-        [REQ_ID] [int] NOT NULL,
-        [REQ_IsCompleted] [bit] NOT NULL,
-        [REQ_CreatedUtc] [datetime] NOT NULL,
+        [Req_PK] [uniqueidentifier] NOT NULL,
+        [Req_ID] [int] IDENTITY(1000,1) NOT NULL,
+        [Req_IsCompleted] [bit] NOT NULL,
+        [Req_CreatedUtc] [datetime] NOT NULL,
          CONSTRAINT
-        [PK_Request] PRIMARY KEY CLUSTERED ([REQ_PK] ASC)
+        [PK_Request] PRIMARY KEY CLUSTERED ([Req_PK] ASC)
         WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90)
         ON [PRIMARY]
         )
@@ -52,14 +54,14 @@ IF OBJECT_ID('[dbo].[CustomerRequest]') IS NULL
     CREATE TABLE
         [dbo].[CustomerRequest]
     (
-        [CUSTREQ_PK] [uniqueidentifier] NOT NULL,
-        [CUSTREQ_CUST_ID] [uniqueidentifier] NOT NULL,
-        [CUSTREQ_REQ_ID] [uniqueidentifier] NOT NULL,
-        [CUSTREQ_TASK_ID] [int] NOT NULL,
-        [CUSTREQ_STATUS] [bit] NOT NULL,
-        [CUSTREQ_CreatedUtc] [datetime] NOT NULL,
+        [CustReq_PK] [uniqueidentifier] NOT NULL,
+        [CustReq_Cust_ID] [uniqueidentifier] NOT NULL,
+        [CustReq_Req_ID] [uniqueidentifier] NOT NULL,
+        [CustReq_TASK_ID] [int] NOT NULL,
+        [CustReq_STATUS] [bit] NOT NULL,
+        [CustReq_CreatedUtc] [datetime] NOT NULL,
          CONSTRAINT
-        [PK_CustomerRequest] PRIMARY KEY CLUSTERED ([CUSTREQ_PK] ASC)
+        [PK_CustomerRequest] PRIMARY KEY CLUSTERED ([CustReq_PK] ASC)
         WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90)
         ON [PRIMARY]
         )
@@ -69,18 +71,18 @@ IF OBJECT_ID('[dbo].[CustomerRequest]') IS NULL
         ADD CONSTRAINT
             [FK_Customer_Request]
             FOREIGN KEY
-                ([CUSTREQ_CUST_ID])
+                ([CustReq_Cust_ID])
                 REFERENCES
-                    [dbo].[Customer]([CUST_PK])
+                    [dbo].[Customer]([Cust_PK])
                 ON DELETE CASCADE;
     ALTER TABLE
         [dbo].[CustomerRequest]
         ADD CONSTRAINT
             [FK_Request_Customer]
             FOREIGN KEY
-            ([CUSTREQ_REQ_ID])
+            ([CustReq_Req_ID])
             REFERENCES
-                [dbo].[Request]([REQ_PK])
+                [dbo].[Request]([Req_PK])
             ON DELETE CASCADE;
     END
 
@@ -89,12 +91,12 @@ IF OBJECT_ID('[dbo].[ExpertRequest]') IS NULL
     CREATE TABLE
         [dbo].[ExpertRequest]
     (
-        [EXPREQ_PK] [uniqueidentifier] NOT NULL,
-        [EXPREQ_EXP_ID] [uniqueidentifier] NOT NULL,
-        [EXPREQ_REQ_ID] [uniqueidentifier] NOT NULL,
-        [EXPREQ_CreatedUtc] [datetime] NOT NULL,
+        [ExpReq_PK] [uniqueidentifier] NOT NULL,
+        [ExpReq_Exp_ID] [uniqueidentifier] NOT NULL,
+        [ExpReq_Req_ID] [uniqueidentifier] NOT NULL,
+        [ExpReq_CreatedUtc] [datetime] NOT NULL,
          CONSTRAINT
-        [PK_ExpertRequest] PRIMARY KEY CLUSTERED ([EXPREQ_PK] ASC)
+        [PK_ExpertRequest] PRIMARY KEY CLUSTERED ([ExpReq_PK] ASC)
         WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90)
         ON [PRIMARY]
         )
@@ -104,17 +106,17 @@ IF OBJECT_ID('[dbo].[ExpertRequest]') IS NULL
         ADD CONSTRAINT
             [FK_Expert_Request]
             FOREIGN KEY
-                ([EXPREQ_EXP_ID])
+                ([ExpReq_Exp_ID])
                 REFERENCES
-                    [dbo].[Expert]([EXP_PK])
+                    [dbo].[Expert]([Exp_PK])
                 ON DELETE CASCADE;
     ALTER TABLE
         [dbo].[ExpertRequest]
         ADD CONSTRAINT
             [FK_Request_Expert]
             FOREIGN KEY
-                ([EXPREQ_REQ_ID])
+                ([ExpReq_Req_ID])
                 REFERENCES
-                    [dbo].[Request]([REQ_PK])
+                    [dbo].[Request]([Req_PK])
                 ON DELETE CASCADE;
     END

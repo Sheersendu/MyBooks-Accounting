@@ -1,12 +1,15 @@
+using Backend.Models;
+
 namespace Backend.Services;
 
 public interface IBackgroundTaskQueue
 {
-	void EnqueueRequest(Guid workItem);
+	void EnqueueRequest(Request request);
 
-	Guid DequeueRequest();
-	void EnqueueExpert(Guid expertId);
+	Request DequeueRequest();
+	void EnqueueExpert(Expert expert);
 
-	Guid DequeueExpert();
+	Expert DequeueExpert();
 	bool IsExpertAvailable();
+	bool IsRequestAvailable();
 }

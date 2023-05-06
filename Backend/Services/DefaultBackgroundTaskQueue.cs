@@ -1,43 +1,64 @@
+using Backend.Business;
+using Backend.Business.ExpertRequest;
+using Backend.Models;
+
 namespace Backend.Services
 {
 	public class DefaultBackgroundTaskQueue : IBackgroundTaskQueue
 	{
-		private readonly Queue<Guid> requestqueue;
-		private readonly Queue<Guid> expertqueue;
+		private readonly Queue<Request> requestQueue;
+		private readonly Queue<Expert> expertQueue;
+		readonly IExpertRequest expertRequest;
 
-		public DefaultBackgroundTaskQueue(int queueCapacity)
+		public DefaultBackgroundTaskQueue(IExpertRequest expertRequest)
 		{
-			requestqueue = new Queue<Guid>();
-			expertqueue = new Queue<Guid>();
-			for (var i = 0; i < 1; i++)
+			requestQueue = new Queue<Request>();
+			expertQueue = new Queue<Expert>();
+			this.expertRequest = expertRequest;
+			GetExperts();
+			System.Timers.Timer timer = new (interval: 86400);
+			timer.Elapsed += ( sender, e ) => GetExperts();
+			timer.Start();
+		}
+
+		void GetExperts()
+		{
+			var experts = expertRequest.GetExperts().Result;
+			foreach (var expert in experts)
 			{
-				requestqueue.Enqueue(Guid.NewGuid());
+				expertQueue.Enqueue(expert);
 			}
 		}
 
-		public void EnqueueRequest(Guid workItem)
+		public void EnqueueRequest(Request request)
 		{
-			requestqueue.Enqueue(workItem);
+			requestQueue.Enqueue(request);
 		}
 
-		public Guid DequeueRequest()
+		public Request DequeueRequest()
 		{
-			return requestqueue.Count > 0 ? requestqueue.Dequeue() : Guid.Empty;
+			return requestQueue.Dequeue();
 		}
 
-		public void EnqueueExpert(Guid expertId)
+		public void EnqueueExpert(Expert expert)
 		{
-			expertqueue.Enqueue(expertId);
+			expertQueue.Enqueue(expert);
+			Console.WriteLine(expertQueue.Count);
 		}
 
-		public Guid DequeueExpert()
+		public Expert DequeueExpert()
 		{
-			return expertqueue.Count > 0 ? expertqueue.Dequeue() : Guid.Empty;
+			return expertQueue.Dequeue();
 		}
 
 		public bool IsExpertAvailable()
 		{
-			return expertqueue.Any();
+			return expertQueue.Any();
+		}
+
+		public bool IsRequestAvailable()
+		{
+			return requestQueue.Any();
 		}
 	}
 }
