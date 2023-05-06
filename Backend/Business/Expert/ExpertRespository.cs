@@ -41,7 +41,7 @@ namespace Backend.Business
 			{
 				Exp_PK = Guid.NewGuid(),
 				Exp_ID = expId,
-				Exp_IsActive = false,
+				Exp_IsActive = true,
 				Exp_CreatedUtc = DateTime.UtcNow
 			};
 			await context.CreateConnection().InsertAsync(expert);

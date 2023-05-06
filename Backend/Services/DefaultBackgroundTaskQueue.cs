@@ -21,7 +21,7 @@ namespace Backend.Services
 			timer.Start();
 		}
 
-		void GetExperts()
+		public void GetExperts()
 		{
 			var experts = expertRequest.GetExperts().Result;
 			foreach (var expert in experts)
@@ -43,7 +43,6 @@ namespace Backend.Services
 		public void EnqueueExpert(Expert expert)
 		{
 			expertQueue.Enqueue(expert);
-			Console.WriteLine(expertQueue.Count);
 		}
 
 		public Expert DequeueExpert()

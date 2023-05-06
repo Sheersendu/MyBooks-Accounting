@@ -12,7 +12,6 @@ static class Program
 
 // Add services to the container.
 		builder.Services.AddSingleton<DapperContext>();
-		builder.Services.AddSingleton<MonitorService>();
 		builder.Services.AddControllers();
 		builder.Services.AddSingleton<QueueService>();
 		builder.Services.AddSingleton<IBackgroundTaskQueue,DefaultBackgroundTaskQueue>();
@@ -34,8 +33,6 @@ static class Program
 
 		var app = builder.Build();
 		
-		// MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>();
-		// monitorLoop.StartMonitorLoop();
 		QueueService queueService = app.Services.GetRequiredService<QueueService>();
 		queueService.StartQueueService();
 // Configure the HTTP request pipeline.
