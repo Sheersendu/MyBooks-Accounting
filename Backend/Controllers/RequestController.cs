@@ -1,17 +1,22 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using System.IO;
 using Backend.Business;
+using Backend.Business.Request;
+using Backend.Models;
 
 namespace Backend.Controllers
 {
 	[ApiController]
-	[Route("expert")]
-	public class ExpertController: ControllerBase
+	[Route("request")]
+	public class RequestController: ControllerBase
 	{
-		private readonly IExpertRepository expertRepo;
+		private readonly IRequestRepository requestRepo;
 
-		public ExpertController(IExpertRepository expertRepo)
+		public RequestController(IRequestRepository requestRepo)
 		{
-			this.expertRepo = expertRepo;
+			this.requestRepo = requestRepo;
 		}
 
 		// [HttpGet("")]
@@ -30,11 +35,11 @@ namespace Backend.Controllers
 		// }
 
 		[HttpPost("")]
-		public async Task<ActionResult> AddExpert([FromHeader] int expId)
+		public async Task<ActionResult> AddExpert()
 		{
 			try
 			{
-				await expertRepo.AddExpert(expId);
+				await requestRepo.AddRequest();
 				return Ok();
 			}
 			catch (Exception ex)

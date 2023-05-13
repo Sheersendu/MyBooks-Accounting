@@ -1,4 +1,5 @@
 using Backend.Business;
+using Backend.Business.ExpertRequest;
 using Backend.Models;
 
 namespace Backend.Services;
@@ -7,46 +8,46 @@ public class QueueService
 {
 	readonly IBackgroundTaskQueue taskQueue;
 	readonly ILogger<QueueService> logger;
-	readonly IExpertRepository expertRepository;
-	Task<IEnumerable<Expert>>? experts;
+	readonly IExpertRequest expertRequest;
 
 	public QueueService(
 		IBackgroundTaskQueue taskQueue,
 		ILogger<QueueService> logger,
-		IExpertRepository expertRepository)
+		IExpertRequest expertRequest)
 	{
 		this.taskQueue = taskQueue;
 		this.logger = logger;
-		this.expertRepository = expertRepository;
+		this.expertRequest = expertRequest;
 	}
 
 	public void StartQueueService()
 	{
-		if (experts == null)
-		{
-			GetExpertsList();
-		}
+		AssignRequestToExpert();
 	}
 
-	private void GetExpertsList()
+	public void AddExpert(Expert expert)
 	{
-		experts = expertRepository.GetExperts();
-		foreach (var expert in experts.Result.ToList())
-		{
-			Console.WriteLine(expert.EXP_ID);
-			AssignTaskToExperts(expert);
-		}
+		taskQueue.EnqueueExpert(expert);
+		AssignRequestToExpert();
+	}
+	
+	public void AddRequest(Request request)
+	{
+		taskQueue.EnqueueRequest(request);
+		AssignRequestToExpert();
 	}
 
-	private void AssignTaskToExperts(Expert expert)
+	void AssignRequestToExpert()
 	{
-		//Make business layer calls here for assignment
-		logger.LogInformation(
-			$"{nameof(QueueService)} is running.{Environment.NewLine}" +
-			$"{Environment.NewLine}");
 		try
 		{
-			logger.LogInformation("Request: {task} - Expert: {expert}", taskQueue.Dequeue(),expert.EXP_ID);
+			while (taskQueue.IsExpertAvailable() && taskQueue.IsRequestAvailable())
+			{
+				var expert = taskQueue.DequeueExpert();
+				var request = taskQueue.DequeueRequest();
+				logger.LogInformation("Request: {task} - Expert: {expert}", request.Req_ID,expert.Exp_ID);
+				expertRequest.MapRequestToExpert(expert.Exp_PK, request.Req_PK);
+			}
 		}
 		catch (Exception ex)
 		{

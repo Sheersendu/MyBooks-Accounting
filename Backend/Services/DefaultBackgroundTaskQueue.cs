@@ -1,26 +1,63 @@
+using Backend.Business.ExpertRequest;
+using Backend.Models;
+
 namespace Backend.Services
 {
 	public class DefaultBackgroundTaskQueue : IBackgroundTaskQueue
 	{
-		private readonly Queue<Guid> queue;
+		private readonly Queue<Request> requestQueue;
+		private readonly Queue<Expert> expertQueue;
+		readonly IExpertRequest expertRequest;
 
-		public DefaultBackgroundTaskQueue(int queueCapacity)
+		public DefaultBackgroundTaskQueue(IExpertRequest expertRequest)
 		{
-			queue = new Queue<Guid>();
-			for (var i = 0; i < 1; i++)
+			requestQueue = new Queue<Request>();
+			expertQueue = new Queue<Expert>();
+			this.expertRequest = expertRequest;
+			GetExperts();
+			System.Timers.Timer timer = new (interval: 86400);
+			timer.Elapsed += ( sender, e ) => GetExperts();
+			timer.Start();
+		}
+
+		public void GetExperts()
+		{
+			var experts = expertRequest.GetExperts().Result;
+			expertQueue.Clear();
+			foreach (var expert in experts)
 			{
-				queue.Enqueue(Guid.NewGuid());
+				expertQueue.Enqueue(expert);
 			}
 		}
 
-		public void QueueRequest(Guid workItem)
+		public void EnqueueRequest(Request request)
 		{
-			queue.Enqueue(workItem);
+			requestQueue.Enqueue(request);
 		}
 
-		public Guid Dequeue()
+		public Request DequeueRequest()
 		{
-			return queue.Count > 0 ? queue.Dequeue() : Guid.Empty;
+			return requestQueue.Dequeue();
+		}
+
+		public void EnqueueExpert(Expert expert)
+		{
+			expertQueue.Enqueue(expert);
+		}
+
+		public Expert DequeueExpert()
+		{
+			return expertQueue.Dequeue();
+		}
+
+		public bool IsExpertAvailable()
+		{
+			return expertQueue.Any();
+		}
+
+		public bool IsRequestAvailable()
+		{
+			return requestQueue.Any();
 		}
 	}
 }
