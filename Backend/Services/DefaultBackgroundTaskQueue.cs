@@ -1,4 +1,3 @@
-using Backend.Business;
 using Backend.Business.ExpertRequest;
 using Backend.Models;
 
@@ -24,6 +23,7 @@ namespace Backend.Services
 		public void GetExperts()
 		{
 			var experts = expertRequest.GetExperts().Result;
+			expertQueue.Clear();
 			foreach (var expert in experts)
 			{
 				expertQueue.Enqueue(expert);
