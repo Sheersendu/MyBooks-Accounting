@@ -12,35 +12,19 @@ namespace Backend.Controllers
 	[Route("request")]
 	public class RequestController: ControllerBase
 	{
-		private readonly IRequestRepository requestRepo;
+		readonly IRequestRepository requestRepo;
 
 		public RequestController(IRequestRepository requestRepo)
 		{
 			this.requestRepo = requestRepo;
 		}
 
-		// [HttpGet("")]
-		// public async Task<IActionResult> GetExperts()
-		// {
-		// 	try
-		// 	{
-		// 		var experts = await expertRepo.GetExperts();
-		// 		return Ok(experts);
-		// 	}
-		// 	catch (Exception ex)
-		// 	{
-		// 		//log error
-		// 		return StatusCode(500, ex.Message);
-		// 	}
-		// }
-
 		[HttpPost("")]
 		public async Task<ActionResult> AddExpert()
 		{
 			try
 			{
-				await requestRepo.AddRequest();
-				return Ok();
+				return new OkObjectResult(await requestRepo.AddRequest());
 			}
 			catch (Exception ex)
 			{

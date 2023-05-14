@@ -1,3 +1,4 @@
+using System.Timers;
 using Backend.Business.ExpertRequest;
 using Backend.Models;
 
@@ -15,19 +16,22 @@ namespace Backend.Services
 			expertQueue = new Queue<Expert>();
 			this.expertRequest = expertRequest;
 			GetExperts();
-			System.Timers.Timer timer = new (interval: 86400);
-			timer.Elapsed += ( sender, e ) => GetExperts();
-			timer.Start();
+			// var timer = new System.Timers.Timer();
+			// timer.Interval = 86400;
+			// timer.Elapsed += GetExperts;
+			// timer.Start();
 		}
 
 		public void GetExperts()
 		{
-			var experts = expertRequest.GetExperts().Result;
 			expertQueue.Clear();
+			var experts = expertRequest.GetExperts().Result;
 			foreach (var expert in experts)
 			{
 				expertQueue.Enqueue(expert);
 			}
+
+			Console.WriteLine("Get Experts:"+expertQueue.Count);
 		}
 
 		public void EnqueueRequest(Request request)
@@ -43,10 +47,12 @@ namespace Backend.Services
 		public void EnqueueExpert(Expert expert)
 		{
 			expertQueue.Enqueue(expert);
+			Console.WriteLine("Enqueue:"+expertQueue.Count);
 		}
 
 		public Expert DequeueExpert()
 		{
+			Console.WriteLine("Dequeue:"+expertQueue.Count);
 			return expertQueue.Dequeue();
 		}
 

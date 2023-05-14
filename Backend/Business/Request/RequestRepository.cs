@@ -21,7 +21,7 @@ public class RequestRepository:IRequestRepository
 		this.service = service;
 	}
 	
-	public async Task AddRequest()
+	public async Task<Guid> AddRequest()
 	{
 		var reqPk = Guid.NewGuid();
 		var reqCreatedTime = DateTime.UtcNow;
@@ -39,5 +39,6 @@ public class RequestRepository:IRequestRepository
 			Req_CreatedUtc = reqCreatedTime
 		};
 		service.AddRequest(request);
+		return reqPk;
 	}
 }

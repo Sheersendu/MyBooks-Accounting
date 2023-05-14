@@ -1,4 +1,6 @@
 using Backend.Business;
+using Backend.Business.Customer;
+using Backend.Business.CustomerRequest;
 using Backend.Business.ExpertRequest;
 using Backend.Business.Request;
 using Backend.Context;
@@ -15,25 +17,18 @@ static class Program
 		builder.Services.AddControllers();
 		builder.Services.AddSingleton<QueueService>();
 		builder.Services.AddSingleton<IBackgroundTaskQueue,DefaultBackgroundTaskQueue>();
-		// builder.Services.AddSingleton<IBackgroundTaskQueue>(_ => 
-		// {
-		// 	if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))
-		// 	{
-		// 		queueCapacity = 100;
-		// 	}
-		//
-		// 	return new DefaultBackgroundTaskQueue(queueCapacity);
-		// });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 		builder.Services.AddSingleton<IExpertRepository, ExpertRepository>();
+		builder.Services.AddSingleton<ICustomerRepository, CustomerRepository>();
 		builder.Services.AddSingleton<IRequestRepository, RequestRepository>();
 		builder.Services.AddSingleton<IExpertRequest,ExpertRequestRepository>();
+		builder.Services.AddSingleton<ICustomerRequest,CustomerRequestRepository>();
 
 		var app = builder.Build();
 		
-		QueueService queueService = app.Services.GetRequiredService<QueueService>();
+		var queueService = app.Services.GetRequiredService<QueueService>();
 		queueService.StartQueueService();
 // Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
