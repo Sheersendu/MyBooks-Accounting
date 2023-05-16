@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Backend.Business;
+using Backend.Business.ExpertRequest;
 
 namespace Backend.Controllers
 {
@@ -7,27 +8,29 @@ namespace Backend.Controllers
 	[Route("expert")]
 	public class ExpertController: ControllerBase
 	{
-		private readonly IExpertRepository expertRepo;
+		readonly IExpertRepository expertRepo;
+		readonly IExpertRequest expertRequest;
 
-		public ExpertController(IExpertRepository expertRepo)
+		public ExpertController(IExpertRepository expertRepo, IExpertRequest expertRequest)
 		{
 			this.expertRepo = expertRepo;
+			this.expertRequest = expertRequest;
 		}
 
-		// [HttpGet("")]
-		// public async Task<IActionResult> GetExperts()
-		// {
-		// 	try
-		// 	{
-		// 		var experts = await expertRepo.GetExperts();
-		// 		return Ok(experts);
-		// 	}
-		// 	catch (Exception ex)
-		// 	{
-		// 		//log error
-		// 		return StatusCode(500, ex.Message);
-		// 	}
-		// }
+		[HttpGet("requests")]
+		public async Task<ObjectResult> GetExpertRequests([FromHeader] int expId)
+		{
+			try
+			{
+				var result = await expertRequest.GetExpertRequest(expId);
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				//log error
+				return StatusCode(500, ex.Message);
+			}
+		}
 
 		[HttpPost("")]
 		public async Task<ActionResult> AddExpert([FromHeader] int expId)

@@ -28,9 +28,9 @@ namespace Backend.Business
 		public async Task<IEnumerable<Expert>> GetExperts()
 		{
 			using var connection = context.CreateConnection();
-			var sqlPath = Path.Combine(Environment.CurrentDirectory, "Scripts", "CreateTables.sql");
-			var sqlFile = await File.ReadAllTextAsync(sqlPath);
-			connection.Execute(sqlFile);
+			// var sqlPath = Path.Combine(Environment.CurrentDirectory, "Scripts", "CreateTables.sql");
+			// var sqlFile = await File.ReadAllTextAsync(sqlPath);
+			// connection.Execute(sqlFile);
 			var experts = await connection.QueryAsync<Expert>(GetExpertsListQuery);
 			return experts;
 		}
