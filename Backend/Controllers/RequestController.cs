@@ -1,16 +1,11 @@
-using Dapper;
-using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
-using System.IO;
-using Backend.Business;
 using Backend.Business.Request;
-using Backend.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
 {
 	[ApiController]
 	[Route("request")]
-	public class RequestController: ControllerBase
+	public class RequestController:ControllerBase
 	{
 		readonly IRequestRepository requestRepo;
 
@@ -19,12 +14,13 @@ namespace Backend.Controllers
 			this.requestRepo = requestRepo;
 		}
 
-		[HttpPost("")]
-		public async Task<ActionResult> AddExpert()
+		[HttpGet("")]
+		public async Task<ObjectResult> GetAllRequests()
 		{
 			try
 			{
-				return new OkObjectResult(await requestRepo.AddRequest());
+				var result = await requestRepo.GetRequests();
+				return Ok(result);
 			}
 			catch (Exception ex)
 			{
