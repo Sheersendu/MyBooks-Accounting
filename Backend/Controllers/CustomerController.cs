@@ -28,13 +28,27 @@ namespace Backend.Controllers
 			}
 		}
 
-		[HttpPost("newRequest")]
+		[HttpPost("request")]
 		public async Task<ActionResult> AddCustomerRequest([FromHeader] int custId)
 		{
 			try
 			{
 				await customerRepo.AddCustomerRequest(custId);
 				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, ex.Message);
+			}
+		}
+		
+		[HttpGet("requests")]
+		public async Task<ActionResult> GetCustomerRequests([FromHeader] int custId)
+		{
+			try
+			{
+				var result = await customerRepo.GetCustomerRequests(custId);
+				return new OkObjectResult(result);
 			}
 			catch (Exception ex)
 			{

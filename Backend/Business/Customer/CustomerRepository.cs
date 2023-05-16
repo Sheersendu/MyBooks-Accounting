@@ -39,4 +39,10 @@ public class CustomerRepository:ICustomerRepository
 		var customerPk = context.CreateConnection().QueryAsync(getCustomer, new {custID = custId}).Result.First().Cust_PK;
 		custReqRepo.CustomerRequestMap(customerPk, requestPk);
 	}
+
+	public async Task<IEnumerable<dynamic>> GetCustomerRequests(int custId)
+	{
+		var customerPk = context.CreateConnection().QueryAsync(getCustomer, new {custID = custId}).Result.First().Cust_PK;
+		return await custReqRepo.GetCustomerRequest(customerPk);
+	}
 }

@@ -30,8 +30,6 @@ namespace Backend.Services
 			{
 				expertQueue.Enqueue(expert);
 			}
-
-			Console.WriteLine("Get Experts:"+expertQueue.Count);
 		}
 
 		public void EnqueueRequest(Request request)
@@ -47,12 +45,10 @@ namespace Backend.Services
 		public void EnqueueExpert(Expert expert)
 		{
 			expertQueue.Enqueue(expert);
-			Console.WriteLine("Enqueue:"+expertQueue.Count);
 		}
 
 		public Expert DequeueExpert()
 		{
-			Console.WriteLine("Dequeue:"+expertQueue.Count);
 			return expertQueue.Dequeue();
 		}
 
