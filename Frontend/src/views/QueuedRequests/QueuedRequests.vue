@@ -18,15 +18,16 @@
     </table>
 </template>
 <script>
-import { getAllRequests } from '@/services/Request';
+import { getAllQueuedRequests } from '@/services/Expert';
 export default {
     data() {
         return {
-            requests : []
+            requests : [],
+            expertId : 2
         }
     },
     async mounted () {
-        this.requests = await getAllRequests();
+        this.requests = await getAllQueuedRequests(this.expertId);
     }
 }
 </script>

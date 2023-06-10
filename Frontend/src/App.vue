@@ -12,14 +12,17 @@
                         <a class="dropdown-item" href="/">My account</a>
                     </li>
                     <li>
+                        <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="/">Log out</a>
                     </li>
                 </ul>
             </li>
-        </ul>
+          </ul>
     </div>
-</nav>
-    <div class="container mt-3">
+    </nav>
+    <div>
       <router-view />
     </div>
   </div>

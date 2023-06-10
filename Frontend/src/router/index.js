@@ -1,9 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
-import dashboard from "@/views/Dashboard/dashboard.vue";
+import dashboard from "@/views/Dashboard/UserDashboard.vue";
 import NotFound from "@/views/NotFound/NotFound.vue"
-import Login from "@/views/Login/Login.vue"
+import Login from "@/views/Login/SigninLogin.vue"
 import AllRequests from "@/views/AllRequests/AllRequests.vue"
-import Request from "@/views/Request/Request.vue"
+import QueuedRequests from "@/views/QueuedRequests/QueuedRequests.vue"
+import CustomerRequest from "@/views/CustomerRequest/CustomerRequest.vue"
 
 const routes = [
     {
@@ -23,14 +24,19 @@ const routes = [
         component: AllRequests
     },
     {
+        path: "/all-queued-requests",
+        name: "all-queued-requests",
+        component: QueuedRequests
+    },
+    {
         path: "/dashboard",
         name: "dashboard",
         component: dashboard,
     },
     {
-        path: "/request/:requestId",
-        name: "request",
-        component: Request,
+        path: "/requests",
+        name: "customer-requests",
+        component: CustomerRequest,
     },
     {
         path: "/:catchAll(.*)",

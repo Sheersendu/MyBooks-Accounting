@@ -29,11 +29,11 @@ namespace Backend.Controllers
 		}
 
 		[HttpPost("request")]
-		public async Task<ActionResult> AddCustomerRequest([FromHeader] int custId)
+		public async Task<ActionResult> AddCustomerRequest([FromHeader] int custId, [FromHeader] string requestName)
 		{
 			try
 			{
-				await customerRepo.AddCustomerRequest(custId);
+				await customerRepo.AddCustomerRequest(custId, requestName);
 				return Ok();
 			}
 			catch (Exception ex)
