@@ -12,7 +12,7 @@
                         <a class="dropdown-item" href="/">My account</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                        <router-link class="dropdown-item" to="/dashboard/">Dashboard</router-link>
                     </li>
                     <li>
                         <a class="dropdown-item" href="/">Log out</a>

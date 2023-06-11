@@ -45,7 +45,7 @@ public class QueueService
 			{
 				var expert = taskQueue.DequeueExpert();
 				var request = taskQueue.DequeueRequest();
-				logger.LogInformation("Request: {task} - Expert: {expert}", request.Req_ID,expert.Exp_ID);
+				logger.LogInformation("Request: {task} - Expert: {expert}", request.Req_Name,expert.Exp_ID);
 				expertRequest.MapRequestToExpert(expert.Exp_PK, request.Req_PK);
 			}
 		}
