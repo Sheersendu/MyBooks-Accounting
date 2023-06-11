@@ -1,7 +1,6 @@
 using Backend.Context;
 using Backend.Services;
 using Dapper;
-using Dapper.Contrib.Extensions;
 
 namespace Backend.Business.Request;
 
@@ -13,13 +12,14 @@ public class RequestRepository:IRequestRepository
 	const string getAllRequests = @"
 	SELECT
 		r.Req_ID,
+		r.Req_Name,
 		r.Req_IsCompleted
 	FROM Request r
 	WHERE r.Req_IsCompleted = 0;";
 
 	const string AddRequestQuery = @"INSERT INTO Request 
 	OUTPUT INSERTED.Req_ID
-	VALUES (@Req_pk, @IsCompleted, @CreatedTime);";
+	VALUES (@Req_pk, @Req_name, @IsCompleted, @CreatedTime);";
 
 	public RequestRepository(DapperContext context, QueueService service)
 	{
@@ -27,13 +27,14 @@ public class RequestRepository:IRequestRepository
 		this.service = service;
 	}
 	
-	public async Task<Guid> AddRequest()
+	public async Task<Guid> AddRequest(string requestName)
 	{
 		var reqPk = Guid.NewGuid();
 		var reqCreatedTime = DateTime.UtcNow;
 		var reqId = await context.CreateConnection().QueryAsync<int>(AddRequestQuery, new
 		{
 			Req_pk = reqPk,
+			Req_name = requestName,
 			IsCompleted = false,
 			CreatedTime = reqCreatedTime
 		});
@@ -41,6 +42,7 @@ public class RequestRepository:IRequestRepository
 		{
 			Req_PK = reqPk,
 			Req_ID = reqId.AsList()[0],
+			Req_Name = requestName,
 			Req_IsCompleted = false,
 			Req_CreatedUtc = reqCreatedTime
 		};

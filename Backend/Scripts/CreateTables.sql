@@ -39,6 +39,7 @@ IF OBJECT_ID('[dbo].[Request]') IS NULL
     (
         [Req_PK] [uniqueidentifier] NOT NULL,
         [Req_ID] [int] IDENTITY(1000,1) NOT NULL,
+        [Req_Name] [varchar](200) NOT NULL,
         [Req_IsCompleted] [bit] NOT NULL,
         [Req_CreatedUtc] [datetime] NOT NULL,
          CONSTRAINT

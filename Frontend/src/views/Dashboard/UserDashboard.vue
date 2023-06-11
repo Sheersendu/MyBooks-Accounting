@@ -16,7 +16,7 @@
             <div class="card-body">
               <h5 class="card-title">All queued Requests</h5>
               <!-- <p class="card-text">Mapping between all queued customer's request and Expert</p> -->
-              <a href="#" class="btn btn-primary">View</a>
+              <button class="btn btn-primary"><router-link class="nav-link" to="/all-queued-requests/">View</router-link></button>
             </div>
           </div>
         </div>
@@ -28,8 +28,7 @@
           <div class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Raise a new Request</h5>
-              <!-- <p class="card-text">Create a new Request</p> -->
-              <a href="#" class="btn btn-primary">New</a>
+              <button class="btn btn-primary" @click="opendialog()">New</button>
             </div>
           </div>
         </div>
@@ -37,8 +36,7 @@
           <div class="card text-center">
             <div class="card-body">
               <h5 class="card-title">View my Requests</h5>
-              <!-- <p class="card-text">Mapping between all queued customer's request and Expert</p> -->
-              <a href="#" class="btn btn-primary">View</a>
+              <button class="btn btn-primary"><router-link class="nav-link" to="/requests/">View</router-link></button>
             </div>
           </div>
         </div>
@@ -51,7 +49,12 @@
 export default {
   data() {
     return {
-      expert: true
+      expert: this.$store.getters.getIsExpert
+    }
+  },
+  methods : {
+    opendialog() {
+      alert("Request created!");
     }
   }
 }

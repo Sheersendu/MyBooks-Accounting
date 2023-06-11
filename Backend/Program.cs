@@ -11,6 +11,15 @@ static class Program
 	public static void Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
+		builder.Services.AddCors(options =>
+		{
+			options.AddPolicy(name: "MyPolicy",
+				policy =>
+				{
+					policy.AllowAnyHeader().AllowAnyMethod();
+					policy.WithOrigins("http://localhost:8080");
+				});
+		});
 
 // Add services to the container.
 		builder.Services.AddSingleton<DapperContext>();
@@ -38,6 +47,7 @@ static class Program
 		}
 
 		app.UseHttpsRedirection();
+		app.UseCors("MyPolicy");
 
 		app.UseAuthorization();
 

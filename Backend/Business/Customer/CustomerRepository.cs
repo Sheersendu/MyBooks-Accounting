@@ -33,9 +33,9 @@ public class CustomerRepository:ICustomerRepository
 		await context.CreateConnection().InsertAsync(customer);
 	}
 
-	public async Task AddCustomerRequest(int custId)
+	public async Task AddCustomerRequest(int custId, string requestName)
 	{
-		var requestPk = await requestRepo.AddRequest();
+		var requestPk = await requestRepo.AddRequest(requestName);
 		var customerPk = context.CreateConnection().QueryAsync(getCustomer, new {custID = custId}).Result.First().Cust_PK;
 		custReqRepo.CustomerRequestMap(customerPk, requestPk);
 	}
