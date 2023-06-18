@@ -33,7 +33,7 @@ namespace Backend.Controllers
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult> AddExpert([FromHeader] int expId)
+		public async Task<ActionResult> AddExpert([FromHeader] string expId)
 		{
 			try
 			{

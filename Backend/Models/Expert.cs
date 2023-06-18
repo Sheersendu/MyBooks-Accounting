@@ -8,7 +8,7 @@ namespace Backend.Models
 		[ExplicitKey]
 		public Guid Exp_PK { get; set; }
 
-		public int Exp_ID { get; set; }
+		public string Exp_ID { get; set; }
 		public bool Exp_IsActive { get; set; }
 		public DateTime Exp_CreatedUtc { get; set; } = DateTime.UtcNow;
 	}

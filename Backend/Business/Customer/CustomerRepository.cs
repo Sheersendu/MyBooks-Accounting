@@ -21,7 +21,7 @@ public class CustomerRepository:ICustomerRepository
 
 	const string getCustomer = @"SELECT Cust_PK from Customer WHERE Cust_ID = @custID;";
 
-	public async Task AddCustomer(int custId)
+	public async Task AddCustomer(string custId)
 	{
 		var customer = new Models.Customer
 		{

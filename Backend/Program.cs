@@ -1,16 +1,21 @@
+using System.Text;
 using Backend.Business;
 using Backend.Business.Customer;
 using Backend.Business.CustomerRequest;
 using Backend.Business.ExpertRequest;
 using Backend.Business.Request;
+using Backend.Business.User;
 using Backend.Context;
 using Backend.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 static class Program
 {
 	public static void Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
+		ConfigurationManager configuration = builder.Configuration;
 		builder.Services.AddCors(options =>
 		{
 			options.AddPolicy(name: "MyPolicy",
@@ -22,6 +27,26 @@ static class Program
 		});
 
 // Add services to the container.
+		builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+			.AddJwtBearer(options =>
+			{
+				options.SaveToken = true;
+				options.RequireHttpsMetadata = false;
+				options.TokenValidationParameters = new TokenValidationParameters()
+				{
+					ValidateIssuer = true,
+					ValidateAudience = true,
+					ValidAudience = configuration["JWT:ValidAudience"],
+					ValidIssuer = configuration["JWT:ValidIssuer"],
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+				};
+			});
 		builder.Services.AddSingleton<DapperContext>();
 		builder.Services.AddControllers();
 		builder.Services.AddSingleton<QueueService>();
@@ -34,6 +59,7 @@ static class Program
 		builder.Services.AddSingleton<IRequestRepository, RequestRepository>();
 		builder.Services.AddSingleton<IExpertRequest,ExpertRequestRepository>();
 		builder.Services.AddSingleton<ICustomerRequest,CustomerRequestRepository>();
+		builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 		var app = builder.Build();
 		
@@ -49,6 +75,7 @@ static class Program
 		app.UseHttpsRedirection();
 		app.UseCors("MyPolicy");
 
+		app.UseAuthentication();
 		app.UseAuthorization();
 
 		app.MapControllers();

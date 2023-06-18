@@ -35,7 +35,7 @@ namespace Backend.Business
 			return experts;
 		}
 
-		public async Task AddExpert(int expId)
+		public async Task AddExpert(string expId)
 		{
 			var expert = new Expert
 			{
