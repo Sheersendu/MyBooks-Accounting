@@ -15,7 +15,7 @@ namespace Backend.Controllers
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult> AddCustomer([FromHeader] int custId)
+		public async Task<ActionResult> AddCustomer([FromHeader] string custId)
 		{
 			try
 			{

@@ -4,7 +4,7 @@ IF OBJECT_ID('[dbo].[Expert]') IS NULL
         [dbo].[Expert]
     (
         [Exp_PK] [uniqueidentifier] NOT NULL,
-        [Exp_ID] [int] NOT NULL,
+        [Exp_ID] [varchar](20) NOT NULL,
         [Exp_IsActive] [bit] NOT NULL,
         [Exp_CreatedUtc] [datetime] NOT NULL,
         CONSTRAINT
@@ -21,7 +21,7 @@ IF OBJECT_ID('[dbo].[Customer]') IS NULL
         [dbo].[Customer]
     (
         [Cust_PK] [uniqueidentifier] NOT NULL,
-        [Cust_ID] [int] NOT NULL,
+        [Cust_ID] [varchar](20) NOT NULL,
         [Cust_IsActive] [bit] NOT NULL,
         [Cust_CreatedUtc] [datetime] NOT NULL,
          CONSTRAINT
@@ -121,3 +121,21 @@ IF OBJECT_ID('[dbo].[ExpertRequest]') IS NULL
                     [dbo].[Request]([Req_PK])
                 ON DELETE CASCADE;
     END
+    
+IF OBJECT_ID('[dbo].[User]') IS NULL
+BEGIN
+CREATE TABLE
+    [dbo].[User]
+(
+    [User_PK] [uniqueidentifier] NOT NULL,
+    [User_ID] [varchar](20) NOT NULL,
+    [User_Password] [varchar](64) NOT NULL,
+    [User_IsExpert] [bit] NOT NULL,
+    [User_CreatedUtc] [datetime] NOT NULL,
+    CONSTRAINT
+    [PK_User] PRIMARY KEY CLUSTERED ([User_PK] ASC)
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90)
+    ON [PRIMARY]
+    )
+    ON [PRIMARY];
+END
